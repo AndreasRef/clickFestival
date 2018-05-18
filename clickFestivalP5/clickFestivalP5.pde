@@ -79,6 +79,8 @@ char divisionChar = ' ';
 
 float ampMultiplyLerp = 0;
 
+float sortAmount = 0;
+
 void setup()
 {
   size(1920, 1080);  
@@ -108,7 +110,7 @@ void setup()
 
   //Image
   img = loadImage("8.jpg");
-  
+
   //Sort letters
   String[] lines = loadStrings("texts.txt");
   //joinedText = join(lines, divisionChar);
@@ -136,7 +138,7 @@ void draw()
   if (snake_OnOff) drawSnake();
   if (imageAsText_OnOff) drawImageAsText();  
   if (sortingLetters_OnOff) drawSortingLetters();
-  
+
 
   trig_pulse = false;
 
@@ -335,42 +337,52 @@ void drawSnake() {
 
 //MODE 5: imageAsText_OnOff
 void drawImageAsText() {
-  
+
   tint(255, imageAlpha);
   image(img, 0, 0);
-  
+
   if (soundReactiveAlpha) {
-  
-  if (ampMultiply > 2) {
-    imageAlpha++;
-  } else {
-    imageAlpha--;
-  }
+
+    if (ampMultiply > 2) {
+      imageAlpha++;
+    } else {
+      imageAlpha--;
+    }
   } else {
     if (frameCount % 10 == 0) imageAlpha++;
   }
-  
+
   imageAlpha = constrain(imageAlpha, 0, 255);
 }
 
 
 //MODE 6: imageAsText_OnOff
 void drawSortingLetters() {
-  
+
   ampMultiplyLerp = lerp(ampMultiplyLerp, ampMultiply, 0.01*abs(ampMultiply-5));
-  println(ampMultiplyLerp);
-    
+  println(ampMultiply);
+
+
+  if (ampMultiply>3) {
+    sortAmount-=0.001*ampMultiply;
+  } else {
+    sortAmount+=0.005;
+  }
+
+  sortAmount = constrain(sortAmount, 0, 1);
+
+
   background(0);
   noStroke();
   smooth();
-  
+
   float textSizeFactor = 1.5;
   int ySize = 31;
   int xSize = 26;
-  
+
   posY = round(ySize*textSizeFactor)+30;
   posX = round(xSize*textSizeFactor)+30;
-  
+
   // go through all characters in the text to draw them  
   for (int i = 0; i < joinedText.length(); i++) {
     // again, find the index of the current letter in the alphabet
@@ -379,20 +391,21 @@ void drawSortingLetters() {
     int index = alphabet.indexOf(uppercaseChar);
     if (index < 0) continue;
 
-    fill(255, min(ampMultiplyLerp*(30 + (i%3)*20),255));
-    
+    fill(255, min(ampMultiplyLerp*(50 + (i%3)*20)-50, 255));
+
     textSize(16*textSizeFactor);
 
     float sortY = index*20*textSizeFactor+40;
-    float m = map(ampMultiplyLerp, 5,1, 0,1);
+    float m = map(ampMultiplyLerp, 5, 1, 0, 1);
     //float m
     m = constrain(m, 0, 1);
-    float interY = lerp(posY, sortY, m);
+    //float interY = lerp(posY, sortY, m);
+    float interY = lerp(posY, sortY, sortAmount);
 
     //if (joinedText.charAt(i) != divisionChar)  
     text(joinedText.charAt(i), posX, interY);
 
-     posX += textWidth(joinedText.charAt(i));
+    posX += textWidth(joinedText.charAt(i));
     if (posX >= width-150 && uppercaseChar == ' ') {
       posY += round(ySize*textSizeFactor);
       posX = round(xSize*textSizeFactor)+30;
