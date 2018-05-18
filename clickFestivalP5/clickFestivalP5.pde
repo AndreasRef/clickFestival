@@ -56,9 +56,32 @@ int snake_dirUDLR = 0;
 StringList snakeAnagrams;
 String drawSnaString;
 
+//Image stuff
+PImage img;
+int imageAlpha = 0;
+boolean soundReactiveAlpha = true;
+
+
+//Sort letters
+String joinedText;
+String alphabet = "ABDEFGHIJKLMNOPQRSTUVYÆØÅ,.;:!?$ "; //OBS missing characthers due to specific poem
+int[] counters = new int[alphabet.length()];
+
+float charSize;
+color charColor = 0;
+int posX, posY;
+
+//boolean drawAlpha = true;
+
+int scale=1;
+float moveY = 0;
+char divisionChar = ' ';
+
+float ampMultiplyLerp = 0;
+
 void setup()
 {
-  size(1920, 1080, P2D);  
+  size(1920, 1080);  
 
   minim = new Minim(this);
   audioIn = minim.getLineIn();
@@ -71,7 +94,8 @@ void setup()
   dB = new float[fft.avgSize()];
   rectMode(CORNERS);
 
-  f = createFont("Avenir", 150, true);
+  f = createFont("Times", 150, true);
+  textFont(f, 16);
 
   // Anagrams
   anagrams = new StringList();
@@ -79,12 +103,25 @@ void setup()
   loadText(0);
   background(0);
   noCursor();
+
+  frameRate(30);
+
+  //Image
+  img = loadImage("8.jpg");
+  
+  //Sort letters
+  String[] lines = loadStrings("texts.txt");
+  //joinedText = join(lines, divisionChar);
+  joinedText = join(lines, divisionChar);
+  countCharacters();
 }
 
 void draw()
 {   
+  surface.setTitle(int(frameRate) + " fps");
+
   fft.forward(audioIn.left); 
-  drawRTA(true);
+  drawRTA(false);
 
   if (gate_isTriggered == 1 && trig_switch != gate_isTriggered) {
     trig_pulse = true; // used to do something once pr. trigger
@@ -93,20 +130,17 @@ void draw()
 
   drawBackground(200); //draw black rect every 200 ms
 
-  if (perlinLetters_OnOff) { 
-    drawPerlinLetters();
-  }
-  if (anagrams_OnOff) { 
-    drawAnagrams();
-  }
-  if (lineSeq_OnOff) { 
-    drawLineSeq();
-  }
-  if (snake_OnOff) { 
-    drawSnake();
-  }  
+  if (perlinLetters_OnOff) drawPerlinLetters();
+  if (anagrams_OnOff) drawAnagrams();
+  if (lineSeq_OnOff)  drawLineSeq();
+  if (snake_OnOff) drawSnake();
+  if (imageAsText_OnOff) drawImageAsText();  
+  if (sortingLetters_OnOff) drawSortingLetters();
+  
 
   trig_pulse = false;
+
+  //println(ampMultiply);
 }  
 
 
@@ -295,6 +329,74 @@ void drawSnake() {
 
     fill(random(180, 255));
     text(drawSnaString, snakeTxtX, snakeTxtY);
+  }
+}
+
+
+//MODE 5: imageAsText_OnOff
+void drawImageAsText() {
+  
+  tint(255, imageAlpha);
+  image(img, 0, 0);
+  
+  if (soundReactiveAlpha) {
+  
+  if (ampMultiply > 2) {
+    imageAlpha++;
+  } else {
+    imageAlpha--;
+  }
+  } else {
+    if (frameCount % 10 == 0) imageAlpha++;
+  }
+  
+  imageAlpha = constrain(imageAlpha, 0, 255);
+}
+
+
+//MODE 6: imageAsText_OnOff
+void drawSortingLetters() {
+  
+  ampMultiplyLerp = lerp(ampMultiplyLerp, ampMultiply, 0.01*abs(ampMultiply-5));
+  println(ampMultiplyLerp);
+    
+  background(0);
+  noStroke();
+  smooth();
+  
+  float textSizeFactor = 1.5;
+  int ySize = 31;
+  int xSize = 26;
+  
+  posY = round(ySize*textSizeFactor)+30;
+  posX = round(xSize*textSizeFactor)+30;
+  
+  // go through all characters in the text to draw them  
+  for (int i = 0; i < joinedText.length(); i++) {
+    // again, find the index of the current letter in the alphabet
+    String s = str(joinedText.charAt(i)).toUpperCase();
+    char uppercaseChar = s.charAt(0);
+    int index = alphabet.indexOf(uppercaseChar);
+    if (index < 0) continue;
+
+    fill(255, min(ampMultiplyLerp*(30 + (i%3)*20),255));
+    
+    textSize(16*textSizeFactor);
+
+    float sortY = index*20*textSizeFactor+40;
+    float m = map(ampMultiplyLerp, 5,1, 0,1);
+    //float m
+    m = constrain(m, 0, 1);
+    float interY = lerp(posY, sortY, m);
+
+    //if (joinedText.charAt(i) != divisionChar)  
+    text(joinedText.charAt(i), posX, interY);
+
+     posX += textWidth(joinedText.charAt(i));
+    if (posX >= width-150 && uppercaseChar == ' ') {
+      posY += round(ySize*textSizeFactor);
+      posX = round(xSize*textSizeFactor)+30;
+    }
   }
 }
 

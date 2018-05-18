@@ -31,3 +31,18 @@ void createAnagram(int thisX, int thisY) {
       }
       anagrams.shuffle(); 
 }
+
+void countCharacters(){
+  for (int i = 0; i < joinedText.length(); i++) {
+    // get one char from the text, convert it to a string and turn it to uppercase
+    char c = joinedText.charAt(i);
+    String s = str(c);
+    s = s.toUpperCase();
+    // convert it back to a char
+    char uppercaseChar = s.charAt(0);
+    // get the position of this char inside the alphabet string
+    int index = alphabet.indexOf(uppercaseChar);
+    // increase the respective counter
+    if (index >= 0) counters[index]++;
+  }
+}
