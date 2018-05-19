@@ -439,7 +439,9 @@ void drawLettersOnCurve() {
 
   if (mousePressed) {
     float d = dist(x, y, mouseX, mouseY);
-    textFont(f, fontSizeMin+d);
+    //float d = ampMultiply*5;
+    //textFont(f, fontSizeMin+d);
+    textFont(f, fontSizeMin+ampMultiply*10);
     char newLetter = joinedText.charAt(counter);
     stepSize = textWidth(newLetter);
 
