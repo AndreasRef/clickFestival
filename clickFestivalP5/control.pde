@@ -10,6 +10,14 @@ boolean sortingLetters_OnOff = false;
 boolean lettersOnCurve_onOff = true;
 
 void keyPressed() {
+  
+  if(key == '0') { 
+    perlinLetters_OnOff  = false;
+    anagrams_OnOff  = false;
+    lineSeq_OnOff  = false;
+    snake_OnOff  = false;  
+  }
+  
   if(key == '1') { perlinLetters_OnOff  = !perlinLetters_OnOff; }
   if(key == '2') { anagrams_OnOff       = !anagrams_OnOff; }
   if(key == '3') { lineSeq_OnOff        = !lineSeq_OnOff; }
@@ -21,6 +29,10 @@ void keyPressed() {
   if (key == '6') { 
   sortingLetters_OnOff = !sortingLetters_OnOff; 
   sortAlpha = 0;
+  sortAmount = 0.5;
+  //
+  
+  
   }
   if (key == '7') { lettersOnCurve_onOff = !lettersOnCurve_onOff; }
   

@@ -90,7 +90,7 @@ float stepSize = 2.0;
 
 PFont font;
 String letters = "Solen jagter os uden lyd eller bevægelse vi går sommeren i møde nærhed til solen slægtskab til solen vi går rundt i det høje græs I et syn jeg havde så jeg: vi gik ned til fyret Jeg var i tvivl om sandet kunne passe på os om det hvirvlede om sig med egne meninger hvis jeg havde haft kræfterne havde jeg animeret det og ladet det bære os hjem En knop i øjenbrynet strammer som en lille pupil der prøver at se der er brug for bevægelser til alle kroppe Hvis ikke vi befinder os i sengene flyder vi ud på plænerne rundt om huset ind i alle husets rum vi opbevarer væsker og mad i køleskabene vi lægger lort i kummerne vi skiller os af med hud i badene Lever man længere forstår man dagene bedre hvis man sidder lidt hver dag med øjnene åbne mod solen jeg vil fotografere alt Alle billeder er de første jeg tager at fotografere at tage bærrene langs vejen gennem hegnet bærrene i stykker mellem fingrene med lilla saft At tage også at tage til blive mere blive ved væsker er venlige alting afslører sig langsomt alting afslører sig langsomt i dryp der er brug for kroppen til alle bevægelser Vi gik aldrig ved vandet sandet behøver ikke vores livstegn Senere knitrer de snegle vi ikke får fjernet fra bålet jeg må se væk mine ben er kolde men jeg mærker det ikke det virker forfængeligt af natten at den efter at have været sort et stykke tid ændrer sig til blålig Her lugter af nyslået græs en lugt af sorg det er græsset der sørger der er andre dage JA for andre dage Det bidske er mit rige det indædte bearbejdede madvarer er uigennemskuelige appelsinerne taler et klarere sprog pluk mig pluk mig IDIOT jeg fratager appelsinerne skrællen trævlerne hengivelse er kaotisk og går aldrig kun én vej jeg kan samle mig til en sky af turkis Jeg har hjerter nok til en farm jeg har organer nok de yderste blade på træet er det dem som er mest forelskede? dem som når lyset først Gå i en lige linje over denne mark spis det strå gå i en lige linje ind til du når den næste planet et nyt skød fugt nok en sølvlignende hud Fødes der nok nye følelser her til at det kan bære bæres der nok nye følelser her til at det kan mærkes hvem hvem hvem danser mellem sætningerne hvem samler organer sammen til endnu et menneske for hvem er dagen et måltid skumringen de sidste stykke af stranden saml kernerne sammen og opbevar dem inderst i kroppen byg en metafor en bred nok tunge Nu skifter tiden til den næste følelse min fødselsdag jeg blærer mig med opretholdelsen Insekterne fører et liv i mine blinde vinkler gør mig usikker jeg tror de vil det for meget mandagen laver det mindste samfund ud af mig som bierne nakker og bygger landbrug af I græsset sorte snegle nemt og langsomt i hinandens slim jeg så græsset det lave krat briste ved skoven Jeg hader duften af græs jeg faldt i søvn og gentog jeg sover jeg sover jeg sover jeg sover Jeg blev født ud af en knude en blæsebælg på et strå jeg blev liggende længe forskellige ting fandt mig eller jeg blev liggende på en insisterende måde og omverdenen dvs. græsset tog sig af mig Ligesom træerne vokser jeg opad er det særligt menneskeligt hvad er det med højden sorter dig frem gennem det afgrundsdybe når nogen endelig får dig til at stønne nu er der nok penge jeg kan ligne en brud any time det skal være forkæl den næste følelse ved at mærke efter de hænder som følger dig gennem natten den spastiske orddeling i ekstasen forkæl den næste sætning ved at skrive den ned en form for husdyb afgrund en form for sælger-gen at jeg vil sige dig hvordan jeg har det Ind over plænerne ind over plænerne lykkelig jeg kalder en måge for skat i forbifarten ind gennem caféerne møder jeg nogen og maner akavetheden i jorden mine ben tager imod plænen meget kærligt jeg synker lidt ned med mine sko her i græsset min krop her i kroppen mit græs min gråd i det grønne det er så blødt så blødt jeg har et svar til plænen febertræet kan vokse i mig febertræet kan vokse i mig";
-int fontSizeMin = 10;
+int fontSizeMin = 3;
 float angleDistortion = 0.0;
 
 int counter = 0;
@@ -98,7 +98,7 @@ int counter = 0;
 
 void setup()
 {
-  //size(1280, 720);
+  //size(1920, 1200);
   fullScreen(2);
 
   minim = new Minim(this);
@@ -174,7 +174,8 @@ void draw()
 
 
   trig_pulse = false;
-
+  
+  //println(sortAlpha);
   //println(ampMultiply);
 }  
 
@@ -226,7 +227,7 @@ void drawPerlinLetters() {
     fill(random(30, 60)*(10-ampMultiply));
     float fontSize = random(45, 75) * map(ampMultiply, 1, 10, 4, 0);
     
-    textFont(f, fontSize);
+    textFont(f, max(fontSize,1));
 
     // text(str(words[wordsX][wordsY].charAt(0)) , random(10,100), random(50,250));
     text(str(words[wordsX][wordsY].charAt(int(random(0, words[wordsX][wordsY].length())))), 
@@ -249,8 +250,8 @@ void drawAnagrams() {
   //Reversed (big and visable when not talking)
   float textSize = random(36, 80) * map(ampMultiply, 1, 10, 3, 1);
   
-  textSize(textSize);
-  textFont(f, textSize);
+  textSize(max(textSize,1));
+  textFont(f, max(textSize,1));
 
   if (trig_switch == 0 ) {
     anaTimeMultiplier = 0;
@@ -301,8 +302,8 @@ void drawAnagrams() {
 //MODE 3: lineSeq_OnOff
 void drawLineSeq() {
   float textSize = random(36, 60);
-  textSize(textSize);
-  textFont(f, textSize);
+  textSize(max(textSize,1));
+  textFont(f, max(textSize,1));
 
   if (millis() > lineSeqLastTime + lineSeqTime) {
     lineSeqLastTime = millis();
@@ -336,9 +337,15 @@ void drawLineSeq() {
 void drawSnake() {
   if (millis() > snakeLastTime + snakeTime + (100 * map(ampMultiply, 1, 10, 1, 5))) {
     snakeLastTime = millis();
-    float textSize = random(36, 60) * map(ampMultiply, 1, 10, 1.7, 3);
-    textSize(textSize);
-    textFont(f, textSize);
+    
+    //Original
+    //float textSize = random(36, 60) * map(ampMultiply, 1, 10, 1.7, 3);
+    
+    //New
+    float textSize = random(36, 60) * map(ampMultiply, 1, 10, 4, 1);
+    
+    textSize(max(textSize,1));
+    textFont(f, max(textSize,1));
 
     snakeIndex += 1;
 
@@ -382,8 +389,13 @@ void drawSnake() {
     if (snakeTxtX < 0) snakeTxtX = width;  
     if (snakeTxtY > height) snakeTxtY = 0;  
     if (snakeTxtY < 0) snakeTxtY = height; 
-
-    fill(random(180, 255));
+    
+    //Original
+    //fill(random(180, 255));
+    
+    //New
+    fill(255 - ampMultiply*25);
+    
     text(drawSnaString, snakeTxtX, snakeTxtY);
   }
 }
@@ -397,10 +409,10 @@ void drawImageAsText() {
 
   if (soundReactiveAlpha) {
 
-    if (ampMultiply > 2) {
-      imageAlpha++;
+    if (ampMultiply > 3) {
+      if (random(1)>0.7) imageAlpha++;
     } else {
-      imageAlpha--;
+      imageAlpha-=2;
     }
   } else {
     if (frameCount % 10 == 0) imageAlpha++;
@@ -417,18 +429,18 @@ void drawSortingLetters() {
   //println(ampMultiply);
 
 
-  if (ampMultiply>3) {
-    sortAmount-=0.001*ampMultiply;
+  if (ampMultiply>6) {
+    sortAmount-=0.0005*ampMultiply;
   } else {
-    sortAmount+=0.01;
+    sortAmount+=0.015;
   }
 
   sortAmount = constrain(sortAmount, 0, 1);
 
-  sortAlpha++;
-  sortAlpha = constrain(sortAlpha, 0, 255);
+  //sortAlpha++;
+  //sortAlpha = constrain(sortAlpha, 0, 255);
 
-  background(0,sortAlpha);
+  //if (sortAlpha > 50) background(0,sortAlpha);
   
   
   noStroke();
@@ -449,8 +461,9 @@ void drawSortingLetters() {
     int index = alphabet.indexOf(uppercaseChar);
     if (index < 0) continue;
 
-    fill(255, min(ampMultiplyLerp*(25 + (i%3)*20)-50, 255));
-
+    //fill(255, min(ampMultiplyLerp*(25 + (i%3)*20)-50, max(sortAlpha,2)));
+    fill(155 + (i%3)*50,10);
+    
     textSize(16*textSizeFactor);
 
     float sortY = index*20*textSizeFactor+40;
@@ -476,10 +489,10 @@ void drawSortingLetters() {
 void drawLettersOnCurve() {
   //Make global variables?
 
-  fill(255);
+  fill(255, ampMultiply*25);
 
   if (mousePressed) {
-    float d = dist(x, y, mouseX, mouseY)+ampMultiply*10;
+    float d = dist(x, y, mouseX, mouseY)+ampMultiply*3;
     //float d = ampMultiply*5;
     textFont(f, fontSizeMin+d);
     //textFont(f, fontSizeMin+ampMultiply*30);
