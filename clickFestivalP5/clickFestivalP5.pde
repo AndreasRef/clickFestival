@@ -70,6 +70,8 @@ int[] counters = new int[alphabet.length()];
 float charSize;
 color charColor = 0;
 int posX, posY;
+int sortAlpha = 0;
+
 
 //boolean drawAlpha = true;
 
@@ -84,10 +86,10 @@ float sortAmount = 0;
 
 // Text on a curve
 float x = 0, y = 0;
-float stepSize = 5.0;
+float stepSize = 2.0;
 
 PFont font;
-String letters = "Sie hören nicht die folgenden Gesänge, Die Seelen, denen ich die ersten sang, Zerstoben ist das freundliche Gedränge, Verklungen ach! der erste Wiederklang.";
+String letters = "Solen jagter os uden lyd eller bevægelse vi går sommeren i møde nærhed til solen slægtskab til solen vi går rundt i det høje græs I et syn jeg havde så jeg: vi gik ned til fyret Jeg var i tvivl om sandet kunne passe på os om det hvirvlede om sig med egne meninger hvis jeg havde haft kræfterne havde jeg animeret det og ladet det bære os hjem En knop i øjenbrynet strammer som en lille pupil der prøver at se der er brug for bevægelser til alle kroppe Hvis ikke vi befinder os i sengene flyder vi ud på plænerne rundt om huset ind i alle husets rum vi opbevarer væsker og mad i køleskabene vi lægger lort i kummerne vi skiller os af med hud i badene Lever man længere forstår man dagene bedre hvis man sidder lidt hver dag med øjnene åbne mod solen jeg vil fotografere alt Alle billeder er de første jeg tager at fotografere at tage bærrene langs vejen gennem hegnet bærrene i stykker mellem fingrene med lilla saft At tage også at tage til blive mere blive ved væsker er venlige alting afslører sig langsomt alting afslører sig langsomt i dryp der er brug for kroppen til alle bevægelser Vi gik aldrig ved vandet sandet behøver ikke vores livstegn Senere knitrer de snegle vi ikke får fjernet fra bålet jeg må se væk mine ben er kolde men jeg mærker det ikke det virker forfængeligt af natten at den efter at have været sort et stykke tid ændrer sig til blålig Her lugter af nyslået græs en lugt af sorg det er græsset der sørger der er andre dage JA for andre dage Det bidske er mit rige det indædte bearbejdede madvarer er uigennemskuelige appelsinerne taler et klarere sprog pluk mig pluk mig IDIOT jeg fratager appelsinerne skrællen trævlerne hengivelse er kaotisk og går aldrig kun én vej jeg kan samle mig til en sky af turkis Jeg har hjerter nok til en farm jeg har organer nok de yderste blade på træet er det dem som er mest forelskede? dem som når lyset først Gå i en lige linje over denne mark spis det strå gå i en lige linje ind til du når den næste planet et nyt skød fugt nok en sølvlignende hud Fødes der nok nye følelser her til at det kan bære bæres der nok nye følelser her til at det kan mærkes hvem hvem hvem danser mellem sætningerne hvem samler organer sammen til endnu et menneske for hvem er dagen et måltid skumringen de sidste stykke af stranden saml kernerne sammen og opbevar dem inderst i kroppen byg en metafor en bred nok tunge Nu skifter tiden til den næste følelse min fødselsdag jeg blærer mig med opretholdelsen Insekterne fører et liv i mine blinde vinkler gør mig usikker jeg tror de vil det for meget mandagen laver det mindste samfund ud af mig som bierne nakker og bygger landbrug af I græsset sorte snegle nemt og langsomt i hinandens slim jeg så græsset det lave krat briste ved skoven Jeg hader duften af græs jeg faldt i søvn og gentog jeg sover jeg sover jeg sover jeg sover Jeg blev født ud af en knude en blæsebælg på et strå jeg blev liggende længe forskellige ting fandt mig eller jeg blev liggende på en insisterende måde og omverdenen dvs. græsset tog sig af mig Ligesom træerne vokser jeg opad er det særligt menneskeligt hvad er det med højden sorter dig frem gennem det afgrundsdybe når nogen endelig får dig til at stønne nu er der nok penge jeg kan ligne en brud any time det skal være forkæl den næste følelse ved at mærke efter de hænder som følger dig gennem natten den spastiske orddeling i ekstasen forkæl den næste sætning ved at skrive den ned en form for husdyb afgrund en form for sælger-gen at jeg vil sige dig hvordan jeg har det Ind over plænerne ind over plænerne lykkelig jeg kalder en måge for skat i forbifarten ind gennem caféerne møder jeg nogen og maner akavetheden i jorden mine ben tager imod plænen meget kærligt jeg synker lidt ned med mine sko her i græsset min krop her i kroppen mit græs min gråd i det grønne det er så blødt så blødt jeg har et svar til plænen febertræet kan vokse i mig febertræet kan vokse i mig";
 int fontSizeMin = 10;
 float angleDistortion = 0.0;
 
@@ -96,7 +98,8 @@ int counter = 0;
 
 void setup()
 {
-  size(1280, 720);  
+  //size(1280, 720);
+  fullScreen(2);
 
   minim = new Minim(this);
   audioIn = minim.getLineIn();
@@ -130,8 +133,21 @@ void setup()
   joinedText = join(lines, divisionChar);
   countCharacters();
   
-  println(joinedText);
-  println(joinedText.length());
+  //println(joinedText);
+  //println(joinedText.length());
+  
+  println("1: perlinLetters_OnOff: " + perlinLetters_OnOff);
+  println("2: anagrams_OnOff: " + anagrams_OnOff);
+  println("3: lineSeq_OnOff: " + lineSeq_OnOff);
+  println("4: snake_OnOff: " + snake_OnOff);
+  println("5: imageAsText_OnOff: " + imageAsText_OnOff);
+  println("6: sortingLetters_OnOff: " + sortingLetters_OnOff);
+  println("7: lettersOnCurve_onOff: " + lettersOnCurve_onOff);
+  println();
+  
+  println(displayWidth);
+  println(displayHeight);
+  
 }
 
 void draw()
@@ -202,9 +218,14 @@ void drawPerlinLetters() {
       mY = height;
     }
 
-
-    fill(random(30, 60)*ampMultiply);
-    float fontSize = random(45, 75) * map(ampMultiply, 1, 10, 1, 2);
+    //Original (big and visable when talking)
+    //fill(random(30, 60)*ampMultiply);
+    //float fontSize = random(45, 75) * map(ampMultiply, 1, 10, 1, 2);
+    
+    //Reversed (big and visable when not talking)
+    fill(random(30, 60)*(10-ampMultiply));
+    float fontSize = random(45, 75) * map(ampMultiply, 1, 10, 4, 0);
+    
     textFont(f, fontSize);
 
     // text(str(words[wordsX][wordsY].charAt(0)) , random(10,100), random(50,250));
@@ -221,8 +242,13 @@ void drawPerlinLetters() {
 
 //MODE 2: anagrams_OnOff
 void drawAnagrams() {
-
-  float textSize = random(36, 80) * map(ampMultiply, 1, 10, 1, 5);
+  
+  //Original (big and visable when talking)
+  //float textSize = random(36, 80) * map(ampMultiply, 1, 10, 1, 5);
+  
+  //Reversed (big and visable when not talking)
+  float textSize = random(36, 80) * map(ampMultiply, 1, 10, 3, 1);
+  
   textSize(textSize);
   textFont(f, textSize);
 
@@ -259,7 +285,12 @@ void drawAnagrams() {
       createAnagram(anaWordX, anaWordY);
     } 
     drawAnaString = anagrams.get(anagramIndex);  
-    fill(random(180, 255));
+    
+    //Original (big and visable when talking)
+    //fill(random(180, 255));
+    
+    //Reversed (big and visable when not talking)
+    fill(random(180, 255),255-ampMultiply*25);
     text(drawAnaString, anagramTxtX, anagramTxtY);
     anagramTxtX += textWidth(words[anaWordX][anaWordY].charAt(anagramIndex));
   }
@@ -275,7 +306,13 @@ void drawLineSeq() {
 
   if (millis() > lineSeqLastTime + lineSeqTime) {
     lineSeqLastTime = millis();
-    fill(255);
+    
+    //Original
+    //fill(255);
+    
+    //New (visable when talking)
+    fill(255, 255 - ampMultiply*25);
+    
     text(words[wordsX][wordsY].charAt(lineSeqIndex), lineSeqTxtX, lineSeqTxtY);
 
     if (gate_isTriggered == 0) {
@@ -373,23 +410,27 @@ void drawImageAsText() {
 }
 
 
-//MODE 6: imageAsText_OnOff
+//MODE 6: sortingLetters_OnOff
 void drawSortingLetters() {
 
   ampMultiplyLerp = lerp(ampMultiplyLerp, ampMultiply, 0.01*abs(ampMultiply-5));
-  println(ampMultiply);
+  //println(ampMultiply);
 
 
   if (ampMultiply>3) {
     sortAmount-=0.001*ampMultiply;
   } else {
-    sortAmount+=0.005;
+    sortAmount+=0.01;
   }
 
   sortAmount = constrain(sortAmount, 0, 1);
 
+  sortAlpha++;
+  sortAlpha = constrain(sortAlpha, 0, 255);
 
-  background(0);
+  background(0,sortAlpha);
+  
+  
   noStroke();
   smooth();
 
@@ -408,7 +449,7 @@ void drawSortingLetters() {
     int index = alphabet.indexOf(uppercaseChar);
     if (index < 0) continue;
 
-    fill(255, min(ampMultiplyLerp*(50 + (i%3)*20)-50, 255));
+    fill(255, min(ampMultiplyLerp*(25 + (i%3)*20)-50, 255));
 
     textSize(16*textSizeFactor);
 
@@ -438,11 +479,15 @@ void drawLettersOnCurve() {
   fill(255);
 
   if (mousePressed) {
-    float d = dist(x, y, mouseX, mouseY);
+    float d = dist(x, y, mouseX, mouseY)+ampMultiply*10;
     //float d = ampMultiply*5;
-    //textFont(f, fontSizeMin+d);
-    textFont(f, fontSizeMin+ampMultiply*10);
-    char newLetter = joinedText.charAt(counter);
+    textFont(f, fontSizeMin+d);
+    //textFont(f, fontSizeMin+ampMultiply*30);
+    //if (joinedText.charAt(counter) == ' ') {
+    //  counter++;
+    //}
+    char newLetter = letters.charAt(counter);
+    
     stepSize = textWidth(newLetter);
 
     if (d > stepSize) {
@@ -452,10 +497,11 @@ void drawLettersOnCurve() {
       translate(x, y);
       rotate(angle + random(angleDistortion));
       text(newLetter, 0, 0);
+      //println(newLetter);
       popMatrix();
 
       counter++;
-      if (counter > joinedText.length()-1) counter = 0;
+      if (counter > letters.length()-1) counter = 0;
 
       x = x + cos(angle) * stepSize;
       y = y + sin(angle) * stepSize;

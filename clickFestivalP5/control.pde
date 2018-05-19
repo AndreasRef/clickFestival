@@ -7,7 +7,7 @@ boolean lineSeq_OnOff = false;
 boolean snake_OnOff = false;
 boolean imageAsText_OnOff = false;
 boolean sortingLetters_OnOff = false;
-boolean lettersOnCurve_onOff = false;
+boolean lettersOnCurve_onOff = true;
 
 void keyPressed() {
   if(key == '1') { perlinLetters_OnOff  = !perlinLetters_OnOff; }
@@ -18,7 +18,10 @@ void keyPressed() {
   imageAsText_OnOff= !imageAsText_OnOff; 
   imageAlpha = 0;
 }
-  if (key == '6') { sortingLetters_OnOff = !sortingLetters_OnOff; }
+  if (key == '6') { 
+  sortingLetters_OnOff = !sortingLetters_OnOff; 
+  sortAlpha = 0;
+  }
   if (key == '7') { lettersOnCurve_onOff = !lettersOnCurve_onOff; }
   
   if (key == 'a' || key == 'A') {soundReactiveAlpha = !soundReactiveAlpha; }
@@ -29,5 +32,7 @@ void keyPressed() {
   println("3: lineSeq_OnOff: " + lineSeq_OnOff);
   println("4: snake_OnOff: " + snake_OnOff);
   println("5: imageAsText_OnOff: " + imageAsText_OnOff);
+  println("6: sortingLetters_OnOff: " + sortingLetters_OnOff);
+  println("7: lettersOnCurve_onOff: " + lettersOnCurve_onOff);
   println();
 }
