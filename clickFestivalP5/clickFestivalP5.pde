@@ -81,9 +81,22 @@ float ampMultiplyLerp = 0;
 
 float sortAmount = 0;
 
+
+// Text on a curve
+float x = 0, y = 0;
+float stepSize = 5.0;
+
+PFont font;
+String letters = "Sie hören nicht die folgenden Gesänge, Die Seelen, denen ich die ersten sang, Zerstoben ist das freundliche Gedränge, Verklungen ach! der erste Wiederklang.";
+int fontSizeMin = 10;
+float angleDistortion = 0.0;
+
+int counter = 0;
+
+
 void setup()
 {
-  size(1920, 1080);  
+  size(1280, 720);  
 
   minim = new Minim(this);
   audioIn = minim.getLineIn();
@@ -116,6 +129,9 @@ void setup()
   //joinedText = join(lines, divisionChar);
   joinedText = join(lines, divisionChar);
   countCharacters();
+  
+  println(joinedText);
+  println(joinedText.length());
 }
 
 void draw()
@@ -138,6 +154,7 @@ void draw()
   if (snake_OnOff) drawSnake();
   if (imageAsText_OnOff) drawImageAsText();  
   if (sortingLetters_OnOff) drawSortingLetters();
+  if (lettersOnCurve_onOff) drawLettersOnCurve();
 
 
   trig_pulse = false;
@@ -411,6 +428,40 @@ void drawSortingLetters() {
       posX = round(xSize*textSizeFactor)+30;
     }
   }
+}
+
+
+//MODE 7: lettersOnCurve_OnOff
+void drawLettersOnCurve() {
+  //Make global variables?
+
+  fill(255);
+
+  if (mousePressed) {
+    float d = dist(x, y, mouseX, mouseY);
+    textFont(f, fontSizeMin+d);
+    char newLetter = joinedText.charAt(counter);
+    stepSize = textWidth(newLetter);
+
+    if (d > stepSize) {
+      float angle = atan2(mouseY-y, mouseX-x); 
+
+      pushMatrix();
+      translate(x, y);
+      rotate(angle + random(angleDistortion));
+      text(newLetter, 0, 0);
+      popMatrix();
+
+      counter++;
+      if (counter > joinedText.length()-1) counter = 0;
+
+      x = x + cos(angle) * stepSize;
+      y = y + sin(angle) * stepSize;
+    }
+  }
+  x = mouseX;
+  y = mouseY;
+  //println(counter);
 }
 
 

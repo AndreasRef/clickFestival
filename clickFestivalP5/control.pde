@@ -7,6 +7,7 @@ boolean lineSeq_OnOff = false;
 boolean snake_OnOff = false;
 boolean imageAsText_OnOff = false;
 boolean sortingLetters_OnOff = false;
+boolean lettersOnCurve_onOff = false;
 
 void keyPressed() {
   if(key == '1') { perlinLetters_OnOff  = !perlinLetters_OnOff; }
@@ -18,6 +19,8 @@ void keyPressed() {
   imageAlpha = 0;
 }
   if (key == '6') { sortingLetters_OnOff = !sortingLetters_OnOff; }
+  if (key == '7') { lettersOnCurve_onOff = !lettersOnCurve_onOff; }
+  
   if (key == 'a' || key == 'A') {soundReactiveAlpha = !soundReactiveAlpha; }
   if (key == 'c' || key == 'C') {background(0); }
   
